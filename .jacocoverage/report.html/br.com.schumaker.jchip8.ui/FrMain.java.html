@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FrMain.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Jchip8&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">br.com.schumaker.jchip8.ui</a> &gt; <span class="el_source">FrMain.java</span></div><h1>FrMain.java</h1><pre class="source lang-java linenums">package br.com.schumaker.jchip8.ui;
+
+import static br.com.schumaker.jchip8.config.Chip8Specs.CHIP8_HEIGHT;
+import static br.com.schumaker.jchip8.config.Chip8Specs.CHIP8_WIDTH;
+import br.com.schumaker.jchip8.core.Chip8;
+import br.com.schumaker.jchip8.core.Chip8Registers;
+import br.com.schumaker.jchip8.io.MainLoop;
+import br.com.schumaker.jchip8.io.Chip8FileSystem;
+import javax.swing.JFileChooser;
+
+/**
+ *
+ * @author hudson schumaker
+ */
+public class FrMain extends javax.swing.JFrame {
+
+<span class="nc" id="L17">    private final Chip8 chip8 = new Chip8();</span>
+<span class="nc" id="L18">    private MainLoop loop = new MainLoop(chip8);</span>
+<span class="nc" id="L19">    private Chip8FileSystem fileSystem = new Chip8FileSystem();</span>
+
+<span class="nc" id="L21">    public FrMain() {</span>
+        // setResizable(false);
+<span class="nc" id="L23">        initComponents();</span>
+<span class="nc" id="L24">        setAndLoad(); </span>
+<span class="nc" id="L25">    }</span>
+
+    private void setAndLoad() {
+<span class="nc" id="L28">        setIgnoreRepaint(true);</span>
+<span class="nc" id="L29">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L30">        this.add(loop);</span>
+
+        //requestFocus();
+        //draw.start();
+<span class="nc" id="L34">    }</span>
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+<span class="nc" id="L40">        menuBar = new javax.swing.JMenuBar();</span>
+<span class="nc" id="L41">        mFile = new javax.swing.JMenu();</span>
+<span class="nc" id="L42">        miLoadROM = new javax.swing.JMenuItem();</span>
+<span class="nc" id="L43">        miExit = new javax.swing.JMenuItem();</span>
+<span class="nc" id="L44">        mTools = new javax.swing.JMenu();</span>
+<span class="nc" id="L45">        miMemoryDump = new javax.swing.JMenuItem();</span>
+<span class="nc" id="L46">        imRegistersDump = new javax.swing.JMenuItem();</span>
+<span class="nc" id="L47">        miScreenDump = new javax.swing.JMenuItem();</span>
+<span class="nc" id="L48">        imStackDump = new javax.swing.JMenuItem();</span>
+
+<span class="nc" id="L50">        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L51">        setTitle(&quot;JChip8 - Emulator&quot;);</span>
+<span class="nc" id="L52">        addKeyListener(new java.awt.event.KeyAdapter() {</span>
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+<span class="nc" id="L54">                formKeyPressed(evt);</span>
+<span class="nc" id="L55">            }</span>
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+<span class="nc" id="L57">                formKeyReleased(evt);</span>
+<span class="nc" id="L58">            }</span>
+        });
+
+<span class="nc" id="L61">        mFile.setText(&quot;File&quot;);</span>
+
+<span class="nc" id="L63">        miLoadROM.setText(&quot;Load ROM&quot;);</span>
+<span class="nc" id="L64">        miLoadROM.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L66">                miLoadROMActionPerformed(evt);</span>
+<span class="nc" id="L67">            }</span>
+        });
+<span class="nc" id="L69">        mFile.add(miLoadROM);</span>
+
+<span class="nc" id="L71">        miExit.setText(&quot;Exit&quot;);</span>
+<span class="nc" id="L72">        miExit.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L74">                miExitActionPerformed(evt);</span>
+<span class="nc" id="L75">            }</span>
+        });
+<span class="nc" id="L77">        mFile.add(miExit);</span>
+
+<span class="nc" id="L79">        menuBar.add(mFile);</span>
+
+<span class="nc" id="L81">        mTools.setText(&quot;Tools&quot;);</span>
+
+<span class="nc" id="L83">        miMemoryDump.setText(&quot;Memory Dump&quot;);</span>
+<span class="nc" id="L84">        miMemoryDump.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L86">                miMemoryDumpActionPerformed(evt);</span>
+<span class="nc" id="L87">            }</span>
+        });
+<span class="nc" id="L89">        mTools.add(miMemoryDump);</span>
+
+<span class="nc" id="L91">        imRegistersDump.setText(&quot;Registers Dump&quot;);</span>
+<span class="nc" id="L92">        imRegistersDump.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L94">                imRegistersDumpActionPerformed(evt);</span>
+<span class="nc" id="L95">            }</span>
+        });
+<span class="nc" id="L97">        mTools.add(imRegistersDump);</span>
+
+<span class="nc" id="L99">        miScreenDump.setText(&quot;Screen Dump&quot;);</span>
+<span class="nc" id="L100">        miScreenDump.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L102">                miScreenDumpActionPerformed(evt);</span>
+<span class="nc" id="L103">            }</span>
+        });
+<span class="nc" id="L105">        mTools.add(miScreenDump);</span>
+
+<span class="nc" id="L107">        imStackDump.setText(&quot;Stack Dump&quot;);</span>
+<span class="nc" id="L108">        imStackDump.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L110">                imStackDumpActionPerformed(evt);</span>
+<span class="nc" id="L111">            }</span>
+        });
+<span class="nc" id="L113">        mTools.add(imStackDump);</span>
+
+<span class="nc" id="L115">        menuBar.add(mTools);</span>
+
+<span class="nc" id="L117">        setJMenuBar(menuBar);</span>
+
+<span class="nc" id="L119">        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());</span>
+<span class="nc" id="L120">        getContentPane().setLayout(layout);</span>
+<span class="nc" id="L121">        layout.setHorizontalGroup(</span>
+<span class="nc" id="L122">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L123">            .addGap(0, 641, Short.MAX_VALUE)</span>
+        );
+<span class="nc" id="L125">        layout.setVerticalGroup(</span>
+<span class="nc" id="L126">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L127">            .addGap(0, 300, Short.MAX_VALUE)</span>
+        );
+
+<span class="nc" id="L130">        pack();</span>
+<span class="nc" id="L131">    }// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+<span class="nc" id="L134">        char charKey = evt.getKeyChar();</span>
+<span class="nc" id="L135">        int vkey = chip8.getKeyboard().map(charKey);</span>
+        
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if(chip8.isWaitingForKey()) {</span>
+<span class="nc" id="L138">            System.out.println(&quot;CPU is wainting&quot;);</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            if (vkey != -1) {</span>
+<span class="nc" id="L140">                 chip8.setBuffer(charKey);</span>
+            } else {
+<span class="nc" id="L142">                chip8.setBuffer((char) -1);</span>
+            } 
+        }
+        
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if (vkey != -1) {</span>
+<span class="nc" id="L147">            chip8.getKeyboard().setDown(vkey);</span>
+        }
+        
+<span class="nc" id="L150">        System.out.println(&quot;Charkey: &quot; + charKey);</span>
+<span class="nc" id="L151">        System.out.println(&quot;Vkey: &quot; + vkey);</span>
+<span class="nc" id="L152">    }//GEN-LAST:event_formKeyPressed</span>
+
+    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
+<span class="nc" id="L155">        char charKey = evt.getKeyChar();</span>
+<span class="nc" id="L156">        int vkey = chip8.getKeyboard().map(charKey);</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        if (vkey != -1) {</span>
+<span class="nc" id="L158">            chip8.getKeyboard().setUp(vkey);</span>
+        }
+<span class="nc" id="L160">    }//GEN-LAST:event_formKeyReleased</span>
+
+    private void miLoadROMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLoadROMActionPerformed
+
+      //  JFileChooser chooser = new JFileChooser(System.getProperty(&quot;user.home&quot;));
+<span class="nc" id="L165">      JFileChooser chooser = new JFileChooser(&quot;C:\\Project\\8-bit\\Chip8\\roms&quot;);</span>
+//        FileFilter filter = new FileNameExtensionFilter(&quot;rom&quot;, &quot;rom&quot;);
+//        chooser.setFileFilter(filter);
+
+<span class="nc" id="L169">        chooser.setAcceptAllFileFilterUsed(true);//support all files</span>
+<span class="nc" id="L170">        chooser.setDialogTitle(&quot;Abrir arquivo&quot;);</span>
+<span class="nc" id="L171">        chooser.setApproveButtonText(&quot;Abrir&quot;);</span>
+<span class="nc" id="L172">        int sf = chooser.showOpenDialog(null);</span>
+<span class="nc" id="L173">        boolean res = false;</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        if (sf == JFileChooser.APPROVE_OPTION) {</span>
+            
+<span class="nc" id="L176">            res = chip8.getMemory().loadRomToRam(</span>
+<span class="nc" id="L177">                    fileSystem.readFromDisk(</span>
+<span class="nc" id="L178">                            chooser.getSelectedFile().getAbsolutePath()));</span>
+        }
+        
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        if (res) {</span>
+            
+<span class="nc" id="L183">           loop.start();</span>
+        }
+<span class="nc" id="L185">    }//GEN-LAST:event_miLoadROMActionPerformed</span>
+
+    private void miExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miExitActionPerformed
+<span class="nc" id="L188">        System.exit(0);</span>
+<span class="nc" id="L189">    }//GEN-LAST:event_miExitActionPerformed</span>
+
+    private void miMemoryDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMemoryDumpActionPerformed
+<span class="nc" id="L192">        System.out.println(&quot;Memory dump:&quot;);</span>
+        //4036 because is reading 40 at a time
+<span class="nc bnc" id="L194" title="All 2 branches missed.">        for (int k = 0; k &lt; 4036; k = k + 40) { //</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">            for (int i = k; i &lt; k + 40; i++) {</span>
+<span class="nc" id="L196">                System.out.print(String.format(&quot;0x%08X&quot;, i));</span>
+                //System.out.print(chip8.getMemory().getMemory(i));
+<span class="nc" id="L198">                System.out.print(&quot;, &quot;);</span>
+            }
+<span class="nc" id="L200">            System.out.println(&quot;&quot;);</span>
+        }
+<span class="nc" id="L202">    }//GEN-LAST:event_miMemoryDumpActionPerformed</span>
+
+    private void imRegistersDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imRegistersDumpActionPerformed
+<span class="nc" id="L205">        System.out.println(&quot;Registers dump:&quot;);</span>
+<span class="nc" id="L206">        System.out.print(&quot;V= &quot;);</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        for (int k = 0; k &lt; Chip8Registers.getInstance().getV().length; k++) {</span>
+<span class="nc" id="L208">            System.out.print(Chip8Registers.getInstance().getV()[k]);</span>
+<span class="nc" id="L209">            System.out.print(&quot;, &quot;);</span>
+        }
+<span class="nc" id="L211">        System.out.println(&quot;&quot;);</span>
+<span class="nc" id="L212">        System.out.println(&quot;I= &quot; + Chip8Registers.getInstance().getI());</span>
+<span class="nc" id="L213">        System.out.println(&quot;DT= &quot; + Chip8Registers.getInstance().getDT());</span>
+<span class="nc" id="L214">        System.out.println(&quot;ST= &quot; + Chip8Registers.getInstance().getST());</span>
+<span class="nc" id="L215">        System.out.println(&quot;PC= &quot; + Chip8Registers.getInstance().getPC());</span>
+<span class="nc" id="L216">        System.out.println(&quot;SP= &quot; + Chip8Registers.getInstance().getSP());</span>
+<span class="nc" id="L217">    }//GEN-LAST:event_imRegistersDumpActionPerformed</span>
+
+    private void miScreenDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miScreenDumpActionPerformed
+<span class="nc" id="L220">        System.out.println(&quot;Screen dump:&quot;);</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">        for (int x = 0; x &lt; CHIP8_HEIGHT; x++) {</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">           for (int y = 0; y &lt; CHIP8_WIDTH; y++) {</span>
+<span class="nc" id="L223">                boolean d = chip8.getScreen().getPixels()[x][y];</span>
+<span class="nc" id="L224">                System.out.print(d);</span>
+<span class="nc" id="L225">                System.out.print(&quot;, &quot;);</span>
+            }
+<span class="nc" id="L227">            System.out.println(&quot;&quot;);</span>
+        }
+<span class="nc" id="L229">    }//GEN-LAST:event_miScreenDumpActionPerformed</span>
+
+    private void imStackDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imStackDumpActionPerformed
+<span class="nc" id="L232">        System.out.println(&quot;Stack dump:&quot;);</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">        for(int k = 0; k &lt; chip8.getStack().getStack().length; k++) {</span>
+<span class="nc" id="L234">            System.out.print(&quot;&quot; + k + &quot;: &quot;);</span>
+<span class="nc" id="L235">            System.out.println(&quot;&quot; +  chip8.getStack().getStack()[k]);</span>
+        }
+<span class="nc" id="L237">    }//GEN-LAST:event_imStackDumpActionPerformed</span>
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem imRegistersDump;
+    private javax.swing.JMenuItem imStackDump;
+    private javax.swing.JMenu mFile;
+    private javax.swing.JMenu mTools;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem miExit;
+    private javax.swing.JMenuItem miLoadROM;
+    private javax.swing.JMenuItem miMemoryDump;
+    private javax.swing.JMenuItem miScreenDump;
+    // End of variables declaration//GEN-END:variables
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

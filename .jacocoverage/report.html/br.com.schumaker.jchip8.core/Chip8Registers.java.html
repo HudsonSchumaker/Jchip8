@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Chip8Registers.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Jchip8&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">br.com.schumaker.jchip8.core</a> &gt; <span class="el_source">Chip8Registers.java</span></div><h1>Chip8Registers.java</h1><pre class="source lang-java linenums">package br.com.schumaker.jchip8.core;
+
+import br.com.schumaker.jchip8.config.Chip8Specs;
+
+/**
+ *
+ * @author hudson schumaker
+ */
+public class Chip8Registers {
+
+<span class="fc" id="L11">    private static final Chip8Registers INSTANCE = new Chip8Registers();</span>
+
+    // Should be 1 byte ???
+<span class="fc" id="L14">    private char[] V = new char[Chip8Specs.CHIP8_TOTAL_DATA_REGISTERS];</span>
+<span class="fc" id="L15">    private char DT = '\u0000'; //delay_timer</span>
+<span class="fc" id="L16">    private char ST = '\u0000'; //sound_timer</span>
+<span class="fc" id="L17">    private short I = 0;</span>
+<span class="fc" id="L18">    private short PC = 0; //program_counter</span>
+<span class="fc" id="L19">    private short SP = 0; //stack_pointer</span>
+
+<span class="fc" id="L21">    private Chip8Registers() {</span>
+<span class="fc" id="L22">        this.initResgisters();</span>
+<span class="fc" id="L23">        System.out.println(&quot;registers................OK&quot;);</span>
+<span class="fc" id="L24">    }</span>
+
+    public void initResgisters() {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        for (int k = 0; k &lt; V.length; k++) {</span>
+<span class="fc" id="L28">            V[k] = '\u0000';</span>
+        }
+        
+<span class="fc" id="L31">        setDT('\u0000'); //delay_timer</span>
+<span class="fc" id="L32">        setST('\u0000'); //sound_timer</span>
+<span class="fc" id="L33">        setI(Integer.valueOf(0).shortValue());</span>
+<span class="fc" id="L34">        setPC(Integer.valueOf(0).shortValue()); //program_counter</span>
+<span class="fc" id="L35">        setSP(Integer.valueOf(0).shortValue()); //stack_pointer</span>
+<span class="fc" id="L36">    }</span>
+
+    public static Chip8Registers getInstance() {
+<span class="fc" id="L39">        return INSTANCE;</span>
+    }
+
+    public void incPC() {
+<span class="fc" id="L43">        this.PC++;</span>
+<span class="fc" id="L44">    }</span>
+
+    public void incPC2x() {
+<span class="fc" id="L47">        incPC();</span>
+<span class="fc" id="L48">        incPC();</span>
+<span class="fc" id="L49">    }</span>
+
+    //decrement stack pointer
+    public void decSP() {
+<span class="fc" id="L53">        this.SP--;</span>
+<span class="fc" id="L54">    }</span>
+
+    //increment stack pointer
+    public void incSP() {
+<span class="fc" id="L58">        this.SP++;</span>
+<span class="fc" id="L59">    }</span>
+
+    public void decST() {
+<span class="nc" id="L62">        this.ST--;</span>
+<span class="nc" id="L63">    }</span>
+
+    public char[] getV() {
+<span class="fc" id="L66">        return V;</span>
+    }
+
+    public void setV(char[] V) {
+<span class="nc" id="L70">        this.V = V;</span>
+<span class="nc" id="L71">    }</span>
+
+    public short getI() {
+<span class="fc" id="L74">        return I;</span>
+    }
+
+    public void setI(short I) {
+<span class="fc" id="L78">        this.I = I;</span>
+<span class="fc" id="L79">    }</span>
+
+    public char getDT() {
+<span class="fc" id="L82">        return DT;</span>
+    }
+
+    public void setDT(char DT) {
+<span class="fc" id="L86">        this.DT = DT;</span>
+<span class="fc" id="L87">    }</span>
+
+    public char getST() {
+<span class="fc" id="L90">        return ST;</span>
+    }
+
+    public void setST(char ST) {
+<span class="fc" id="L94">        this.ST = ST;</span>
+<span class="fc" id="L95">    }</span>
+
+    public short getPC() {
+<span class="fc" id="L98">        return PC;</span>
+    }
+
+    public void setPC(short PC) {
+<span class="fc" id="L102">        this.PC = PC;</span>
+<span class="fc" id="L103">    }</span>
+
+    public short getSP() {
+<span class="fc" id="L106">        return SP;</span>
+    }
+
+    public void setSP(short SP) {
+<span class="fc" id="L110">        this.SP = SP;</span>
+<span class="fc" id="L111">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

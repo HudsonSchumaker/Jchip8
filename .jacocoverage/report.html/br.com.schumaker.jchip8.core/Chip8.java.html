@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Chip8.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Jchip8&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">br.com.schumaker.jchip8.core</a> &gt; <span class="el_source">Chip8.java</span></div><h1>Chip8.java</h1><pre class="source lang-java linenums">package br.com.schumaker.jchip8.core;
+
+import static br.com.schumaker.jchip8.config.Chip8Specs.CHIP8_DEFAULT_SPRITE_HEIGHT;
+import br.com.schumaker.jchip8.io.Chip8Keyboard;
+import java.util.Random;
+
+/**
+ *
+ * @author hudson schumaker
+ */
+public class Chip8 {
+
+    private final Chip8Memory memory;
+    private final Chip8Stack stack;
+    private final Chip8Registers registers;
+    private final Chip8Keyboard keyboard;
+    private final Chip8Screen screen;
+    
+    private boolean waitingForKey;
+    private char buffer;
+
+<span class="fc" id="L22">    public Chip8() {</span>
+<span class="fc" id="L23">        this.memory = new Chip8Memory();</span>
+<span class="fc" id="L24">        this.stack = new Chip8Stack(this);</span>
+<span class="fc" id="L25">        this.registers = Chip8Registers.getInstance();</span>
+<span class="fc" id="L26">        this.keyboard = new Chip8Keyboard();</span>
+<span class="fc" id="L27">        this.screen = new Chip8Screen();</span>
+<span class="fc" id="L28">        this.initComponents();</span>
+<span class="fc" id="L29">    }</span>
+
+    private void initComponents() {
+<span class="fc" id="L32">        this.waitingForKey = false;</span>
+<span class="fc" id="L33">        this.buffer = 'z';</span>
+<span class="fc" id="L34">        this.memory.initMemory();</span>
+<span class="fc" id="L35">        this.memory.initCharacterSet();</span>
+<span class="fc" id="L36">        this.stack.initStack();</span>
+<span class="fc" id="L37">        System.out.println(&quot;chip8....................OK&quot;);</span>
+        
+        // test area
+<span class="fc" id="L40">    }</span>
+
+    public void execOpCode(short opCode) {
+<span class="fc bfc" id="L43" title="All 3 branches covered.">        switch (opCode) {</span>
+            case 0x00E0: // CLS: Clear the Display
+<span class="fc" id="L45">                Chip8Screen.cleanScreen();</span>
+<span class="fc" id="L46">                break;</span>
+
+            case 0x00EE: // RET: Return from subroutine
+<span class="fc" id="L49">                registers.setPC(stack.stackPop());</span>
+<span class="fc" id="L50">                break;</span>
+
+            default:
+<span class="fc" id="L53">                this.execOpCodeExtended(opCode);</span>
+        }
+<span class="fc" id="L55">    }</span>
+
+    public void execOpCodeExtended(short opCode) {
+<span class="fc" id="L58">        short nnn = (short) (opCode &amp; 0x0fff);</span>
+<span class="fc" id="L59">        char x = (char) ((opCode &gt;&gt; 8) &amp; 0x000f);</span>
+<span class="fc" id="L60">        char y = (char) ((opCode &gt;&gt; 4) &amp; 0x000f);</span>
+<span class="fc" id="L61">        char kk = (char) (opCode &amp; 0x00ff);</span>
+<span class="fc" id="L62">        char n = (char) (opCode &amp; 0x000f);</span>
+
+<span class="pc bpc" id="L64" title="2 of 16 branches missed.">        switch (opCode &amp; 0xf000) {</span>
+            case 0x1000: // JP addr, 1nnn Jump to location nnn's
+<span class="fc" id="L66">                registers.setPC(nnn);</span>
+<span class="fc" id="L67">                break;</span>
+            case 0x2000: // CALL addr, 2nnn Call subroutine at location nnn
+<span class="fc" id="L69">                stack.stackPush(registers.getPC());</span>
+<span class="fc" id="L70">                registers.setPC(nnn);</span>
+<span class="fc" id="L71">                break;</span>
+   
+            case 0x3000: // SE Vx, byte - 3xkk Skip next instruction if Vx=kk
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">                if (registers.getV()[x] == kk) {</span>
+<span class="fc" id="L75">                    registers.incPC2x();</span>
+                }
+                break;
+
+            case 0x4000: // SNE Vx, byte - 3xkk Skip next instruction if Vx!=kk
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">                if (registers.getV()[x] != kk) {</span>
+<span class="fc" id="L81">                    registers.incPC2x();</span>
+                }
+                break;
+
+            case 0x5000: // 5xy0 - SE, Vx, Vy, skip the next instruction if Vx = Vy
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">                if (registers.getV()[x] == registers.getV()[y]) {</span>
+<span class="fc" id="L87">                    registers.incPC2x();</span>
+                }
+                break;
+
+            case 0x6000: // 6xkk - LD Vx, byte, Vx = kk
+<span class="fc" id="L92">                registers.getV()[x] = kk;</span>
+<span class="fc" id="L93">                break;</span>
+
+            case 0x7000: // 7xkk - ADD Vx, byte. Set Vx = Vx + kk
+<span class="fc" id="L96">                registers.getV()[x] += kk;</span>
+<span class="fc" id="L97">                break;</span>
+
+            case 0x8000:
+<span class="fc" id="L100">                this.execOpCodeExtended8000(opCode);</span>
+<span class="fc" id="L101">                break;</span>
+
+            case 0x9000: // 9xy0 - SNE Vx, Vy. Skip next instruction if Vx != Vy
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">                if (registers.getV()[x] != registers.getV()[y]) {</span>
+<span class="fc" id="L105">                    registers.incPC2x();</span>
+                }
+                break;
+
+            case 0xA000: // Annn - LD I, addr. Sets the I register to nnn
+<span class="fc" id="L110">                registers.setI(nnn);</span>
+<span class="fc" id="L111">                break;</span>
+
+            case 0xB000: // bnnn - Jump to location nnn + V0
+<span class="fc" id="L114">                short v0 = (short) registers.getV()[0];</span>
+<span class="fc" id="L115">                short value = (short) (nnn + v0);</span>
+<span class="fc" id="L116">                registers.setPC(value);</span>
+<span class="fc" id="L117">                break;</span>
+                
+//                short v0 = (short) registers.getV()[0];
+//                short value = (short) (nnn + v0);
+//                registers.setPC(value);
+//                break;
+
+            case 0xC000: // Cxkk - RND Vx, byte
+<span class="fc" id="L125">                Random rand = new Random();</span>
+<span class="fc" id="L126">                int randomNumber = rand.nextInt(256);</span>
+<span class="fc" id="L127">                int intKK = kk;</span>
+<span class="fc" id="L128">                int res = randomNumber &amp; intKK;</span>
+<span class="fc" id="L129">                registers.getV()[x] = (char) res;</span>
+<span class="fc" id="L130">                break;</span>
+
+            case 0xD000:  // Dxyn - DRW Vx, Vy, nibble. Draws sprite to the screen
+<span class="fc" id="L133">                char[] sprite = memory.readMemory(registers.getI(), n);</span>
+<span class="fc" id="L134">                boolean result = Chip8Screen.setSprite(</span>
+<span class="fc" id="L135">                        registers.getV()[x],</span>
+<span class="fc" id="L136">                        registers.getV()[y],</span>
+                        sprite,
+                        n);
+
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">                if (result) {</span>
+<span class="nc" id="L141">                    registers.getV()[0x0f] = '\u0001';</span>
+                } else {
+<span class="fc" id="L143">                    registers.getV()[0x0f] = '\u0000';</span>
+                }
+
+<span class="fc" id="L146">                break;</span>
+
+            case 0xE000:  // Keyboard operations
+<span class="nc" id="L149">                this.keyboardOpCode(opCode);</span>
+<span class="nc" id="L150">                break;</span>
+
+            case 0xF000:
+<span class="fc" id="L153">                this.execOpCodeExtendedF(opCode);</span>
+                break;
+        }
+<span class="fc" id="L156">    }</span>
+
+    public void execOpCodeExtended8000(short opCode) {
+<span class="fc" id="L159">        char x = (char) ((opCode &gt;&gt; 8) &amp; 0x000f);</span>
+<span class="fc" id="L160">        char y = (char) ((opCode &gt;&gt; 4) &amp; 0x000f);</span>
+<span class="fc" id="L161">        char finalFourBits = (char) (opCode &amp; 0x000f);</span>
+<span class="pc bpc" id="L162" title="3 of 10 branches missed.">        switch (finalFourBits) {</span>
+            case 0x00: // 8xy0 - LD Vx, Vy. Vx = Vy
+<span class="fc" id="L164">                registers.getV()[x] = registers.getV()[y];</span>
+<span class="fc" id="L165">                break;</span>
+
+            case 0x01: // 8xy1 - OR Vx, Vy. Performs a bitwise OR on Vx and Vy stores the result in Vx
+<span class="fc" id="L168">                registers.getV()[x] = (char) (registers.getV()[x] | registers.getV()[y]);</span>
+<span class="fc" id="L169">                break;</span>
+
+            case 0x02: // 8xy2 - AND Vx, Vy. Performs a bitwise AND on Vx and Vy stores the result in Vx
+<span class="fc" id="L172">                registers.getV()[x] = (char) (registers.getV()[x] &amp; registers.getV()[y]);</span>
+<span class="fc" id="L173">                break;</span>
+
+            case 0x03: // 8xy3 - XOR Vx, Vy. Performs a bitwise XOR on Vx and Vy stores the result in Vx
+<span class="nc" id="L176">                registers.getV()[x] = (char) (registers.getV()[x] ^ registers.getV()[y]);</span>
+<span class="nc" id="L177">                break;</span>
+
+            case 0x04: // 8xy4 - ADD Vx, Vy. Set Vx = Vx + Vy, set VF = carry
+<span class="fc" id="L180">                short tmp = (short) (registers.getV()[x] + registers.getV()[y]);</span>
+<span class="fc" id="L181">                registers.getV()[0x0f] = '\u0000';</span>
+                
+                //Because char in java use 2bytes
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">                if (tmp &gt; 0xff) {</span>
+<span class="fc" id="L185">                    tmp = (short) (tmp - (short)256);</span>
+<span class="fc" id="L186">                    registers.getV()[0x0f] = '\u0001';</span>
+                }
+<span class="fc" id="L188">                registers.getV()[x] = (char) tmp;</span>
+<span class="fc" id="L189">                break;</span>
+
+            case 0x05: // 8xy5 - SUB Vx, Vy. Set vx = Vx - Vy, set VF = Not borrow
+<span class="fc" id="L192">                registers.getV()[0x0f] = '\u0000';</span>
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">                if (registers.getV()[x] &gt; registers.getV()[y]) {</span>
+<span class="fc" id="L194">                    registers.getV()[0x0f] = '\u0001';</span>
+                }
+<span class="fc" id="L196">                registers.getV()[x] = (char) (registers.getV()[x] - registers.getV()[y]);</span>
+<span class="fc" id="L197">                break;</span>
+
+            case 0x06: // 8xy6 - SHR Vx {, Vy}
+<span class="fc" id="L200">                registers.getV()[0x0f] = (char) (registers.getV()[x] &amp; 0x01);</span>
+<span class="fc" id="L201">                registers.getV()[x] /= 2;</span>
+<span class="fc" id="L202">                break;</span>
+
+            case 0x07: // 8xy7 - SUBN Vx, Vy
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">                if (registers.getV()[y] &gt; registers.getV()[x]) {</span>
+<span class="fc" id="L206">                    registers.getV()[0x0f] = '\u0001';</span>
+                } else {
+<span class="nc" id="L208">                    registers.getV()[0x0f] = '\u0000';</span>
+                }
+
+<span class="fc" id="L211">                registers.getV()[x] = (char) (registers.getV()[y] - registers.getV()[x]);</span>
+<span class="fc" id="L212">                break;</span>
+
+            case 0x0E: // 8xyE - SHL Vx {, Vy}
+<span class="nc" id="L215">                registers.getV()[0x0f] = (char) (registers.getV()[x] &amp; 0b10000000);</span>
+<span class="nc" id="L216">                registers.getV()[x] *= 2;</span>
+                break;
+        }
+<span class="fc" id="L219">    }</span>
+
+    public void execOpCodeExtendedF(short opCode) {
+<span class="fc" id="L222">        char x = (char) ((opCode &gt;&gt; 8) &amp; 0x000f);</span>
+<span class="pc bpc" id="L223" title="2 of 10 branches missed.">        switch (opCode &amp; 0x00ff) {</span>
+            
+            case 0x07: // fx07 - LD Vx, DT. Set Vx to the delay timer value
+<span class="fc" id="L226">                registers.getV()[x] = registers.getDT();</span>
+<span class="fc" id="L227">                break;</span>
+            
+            case 0x0A: // fx0a - LD Vx, K
+<span class="nc" id="L230">                char pressed_key = waitForKeyPress();</span>
+<span class="nc" id="L231">                registers.getV()[x] = pressed_key;</span>
+<span class="nc" id="L232">                break; </span>
+
+            case 0x15:  // fx15 - LD DT, Vx, set the delay timer to Vx
+<span class="fc" id="L235">                registers.setDT(registers.getV()[x]);</span>
+<span class="fc" id="L236">                break;</span>
+
+            case 0x18:  // fx18 - LD ST, Vx, set the sound timer to Vx
+<span class="fc" id="L239">                registers.setST(registers.getV()[x]);</span>
+<span class="fc" id="L240">                break;</span>
+
+            case 0x1e: // fx1e - Add I, Vx
+<span class="fc" id="L243">                short i = (short) (registers.getI() + registers.getV()[x]);</span>
+<span class="fc" id="L244">                registers.setI(i);</span>
+<span class="fc" id="L245">                break;</span>
+
+            case 0x29: // fx29 - LD F, Vx
+<span class="fc" id="L248">                registers.setI((short) (registers.getV()[x] * </span>
+                        CHIP8_DEFAULT_SPRITE_HEIGHT));
+<span class="fc" id="L250">                break;</span>
+                
+            case 0x33:  // fx33 - LD B, Vx
+<span class="fc" id="L253">                char hundreds = (char) (registers.getV()[x] / 100);</span>
+<span class="fc" id="L254">                char tens = (char) (registers.getV()[x] / 10 % 10);</span>
+<span class="fc" id="L255">                char units = (char) (registers.getV()[x] % 10);</span>
+                
+<span class="fc" id="L257">                memory.writeMemory(registers.getI(), hundreds);</span>
+<span class="fc" id="L258">                memory.writeMemory(registers.getI() + 1, tens);</span>
+<span class="fc" id="L259">                memory.writeMemory(registers.getI() + 2, units);</span>
+<span class="fc" id="L260">                break;</span>
+            
+            case 0x55: // fx55 - LD [I], Vx
+<span class="fc bfc" id="L263" title="All 2 branches covered.">                for (int j = 0; j &lt;= x; j++) {</span>
+<span class="fc" id="L264">                    memory.writeMemory(registers.getI() + j, registers.getV()[j]);</span>
+                }
+<span class="fc" id="L266">                break;    </span>
+            
+            case 0x65: // fx65 - LD Vx, [I]
+<span class="fc bfc" id="L269" title="All 2 branches covered.">                for (int k = 0; k &lt;= x; k++) {</span>
+<span class="fc" id="L270">                    registers.getV()[k] = memory.readMemory(registers.getI() + k);</span>
+                }
+            break;
+        }
+<span class="fc" id="L274">    }</span>
+
+    public void keyboardOpCode(short opCode) {
+<span class="nc" id="L277">        char x = (char) ((opCode &gt;&gt; 8) &amp; 0x000f);</span>
+
+<span class="nc bnc" id="L279" title="All 3 branches missed.">        switch (opCode &amp; 0x00ff) {</span>
+            case 0x9e:  // Ex9e - SKP Vx, Skip the next instruction if the key with the value of Vx is pressed
+<span class="nc bnc" id="L281" title="All 2 branches missed.">                if (keyboard.isDown(registers.getV()[x])) {</span>
+<span class="nc" id="L282">                    registers.incPC2x();</span>
+                }
+                break;
+
+            case 0xa1: // Exa1 - SKNP Vx - Skip the next instruction if the key with the value of Vx is not pressed
+<span class="nc bnc" id="L287" title="All 2 branches missed.">                if (!keyboard.isDown(registers.getV()[x])) {</span>
+<span class="nc" id="L288">                    registers.incPC2x();</span>
+                }
+                break;
+        }
+<span class="nc" id="L292">    }</span>
+    
+    public boolean isWaitingForKey() {
+<span class="nc" id="L295">        return waitingForKey;</span>
+    }
+    
+    public void resetChip8() {
+<span class="nc" id="L299">        Chip8Registers.getInstance().initResgisters();</span>
+<span class="nc" id="L300">        Chip8Screen.cleanScreen();</span>
+<span class="nc" id="L301">        this.keyboard.initKeyboard();  </span>
+<span class="nc" id="L302">        this.waitingForKey = false;</span>
+<span class="nc" id="L303">        this.buffer = 'z';</span>
+<span class="nc" id="L304">        this.memory.initMemory();</span>
+<span class="nc" id="L305">        this.memory.initCharacterSet();</span>
+<span class="nc" id="L306">        this.stack.initStack();</span>
+<span class="nc" id="L307">    }</span>
+    
+    private char waitForKeyPress() {
+<span class="nc" id="L310">        System.out.println(&quot;Chip8 is waiting for key&quot;);</span>
+<span class="nc" id="L311">        waitingForKey = true;</span>
+<span class="nc bnc" id="L312" title="All 2 branches missed.">        while(buffer == 'z') {</span>
+        }
+        
+<span class="nc" id="L315">        char res = buffer;</span>
+<span class="nc" id="L316">        buffer = 'z'; </span>
+<span class="nc" id="L317">        return res;</span>
+    }
+
+    public void setBuffer(char buffer) {
+<span class="nc" id="L321">        this.buffer = buffer;</span>
+<span class="nc" id="L322">    }</span>
+    
+    public Chip8Memory getMemory() {
+<span class="fc" id="L325">        return this.memory;</span>
+    }
+
+    public Chip8Registers getRegisters() {
+<span class="fc" id="L329">        return registers;</span>
+    }
+
+    public Chip8Stack getStack() {
+<span class="fc" id="L333">        return stack;</span>
+    }
+
+    public Chip8Keyboard getKeyboard() {
+<span class="nc" id="L337">        return keyboard;</span>
+    }
+
+    public Chip8Screen getScreen() {
+<span class="nc" id="L341">        return screen;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

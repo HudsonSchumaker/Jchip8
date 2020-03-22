@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Chip8Memory.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;Jchip8&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">br.com.schumaker.jchip8.core</a> &gt; <span class="el_source">Chip8Memory.java</span></div><h1>Chip8Memory.java</h1><pre class="source lang-java linenums">package br.com.schumaker.jchip8.core;
+
+import static br.com.schumaker.jchip8.config.Chip8Specs.CHIP8_MEMORY_SIZE;
+import static br.com.schumaker.jchip8.config.Chip8Specs.LOAD_ADDR;
+import static br.com.schumaker.jchip8.core.Chip8DefaultCharacterSet.DEFAULT_CHARACTER_SET;
+import br.com.schumaker.jchip8.exceptions.OutOfMemoryException;
+
+/**
+ *
+ * @author hudson schumaker
+ */
+<span class="fc" id="L12">public class Chip8Memory {</span>
+
+    // RAM 0x000 -&gt; 0xFFF
+<span class="fc" id="L15">    private final char[] memory = new char[CHIP8_MEMORY_SIZE];</span>
+
+    public boolean loadRomToRam(byte[] rom) {
+<span class="fc" id="L18">        boolean isLoad = false;</span>
+<span class="fc" id="L19">        int r = 0;</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">        for (int k = LOAD_ADDR; k &lt; LOAD_ADDR + rom.length; k++, r++) {</span>
+<span class="fc" id="L21">            memory[k] = (char) (rom[r] &amp; 0xFF);</span>
+        }
+<span class="fc" id="L23">        Chip8Registers.getInstance().setPC(LOAD_ADDR);</span>
+        
+<span class="fc" id="L25">        isLoad = true;</span>
+<span class="fc" id="L26">        return isLoad;</span>
+    }
+    
+    public short readMemoryInShort(int index) {
+<span class="fc" id="L30">        char byte1 = readMemory(index);</span>
+<span class="fc" id="L31">        char byte2 = readMemory(++index);</span>
+        
+//        short signedShort = (short) (byte1 &lt;&lt; 8 | byte2);
+//        return  (short) (signedShort &amp; 0xFFFF);
+
+<span class="fc" id="L36">        return (short) (byte1 &lt;&lt; 8 | byte2);</span>
+    }
+    
+    public char readMemory(int index) {
+<span class="fc" id="L40">        isMemoryInBounds(index);</span>
+<span class="fc" id="L41">        return this.memory[index];</span>
+    }
+
+    public char[] readMemory(int start, int end) {
+<span class="fc" id="L45">        int range = end - start;</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (range &lt; 0) {</span>
+<span class="nc" id="L47">            range *= -1;</span>
+        }
+<span class="fc" id="L49">        char[] data = new char[range];</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        for (int k = 0; k &lt; range; k++, start++) {</span>
+<span class="fc" id="L51">            data[k] = readMemory(start);</span>
+        }
+<span class="fc" id="L53">        return data;</span>
+    }
+    
+    public void writeMemory(int index, Integer value) {
+<span class="fc" id="L57">        writeMemory(index, value.shortValue());</span>
+<span class="fc" id="L58">    }</span>
+    
+    public void writeMemory(int index, short value) {
+<span class="fc" id="L61">        writeMemory(index, (char) value);</span>
+<span class="fc" id="L62">    }</span>
+
+    public void writeMemory(int index, char value) {
+<span class="fc" id="L65">        isMemoryInBounds(index);</span>
+<span class="fc" id="L66">        this.memory[index] = value;</span>
+<span class="fc" id="L67">    }</span>
+
+    public static void isMemoryInBounds(int index) {
+<span class="fc bfc" id="L70" title="All 4 branches covered.">        if (!(index &gt;= 0 &amp;&amp; index &lt; CHIP8_MEMORY_SIZE)) {</span>
+<span class="fc" id="L71">            throw new OutOfMemoryException();</span>
+        }
+<span class="fc" id="L73">    }</span>
+
+    public void initMemory() {
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (int k = 0; k &lt; memory.length; k++) {</span>
+<span class="fc" id="L77">            memory[k] = '\u0000';</span>
+        }
+<span class="fc" id="L79">        System.out.println(&quot;memory...................OK&quot;);</span>
+<span class="fc" id="L80">    }</span>
+    
+    public void initCharacterSet() {
+<span class="fc" id="L83">        System.arraycopy(DEFAULT_CHARACTER_SET,</span>
+                0, memory, 0,
+                DEFAULT_CHARACTER_SET.length);
+<span class="fc" id="L86">        System.out.println(&quot;default character set....OK&quot;);</span>
+<span class="fc" id="L87">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
