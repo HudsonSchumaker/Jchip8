@@ -6,7 +6,7 @@ import java.util.Random;
 
 /**
  *
- * @author hudson schumaker
+ * @author Hudson Schumaker
  */
 public class Chip8 {
 
