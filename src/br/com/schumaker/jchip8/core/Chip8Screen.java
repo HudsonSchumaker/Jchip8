@@ -10,8 +10,7 @@ import br.com.schumaker.jchip8.exceptions.PixelOutOfScreenExecption;
  */
 public class Chip8Screen {
 
-    private static final boolean[][] PIXELS
-            = new boolean[CHIP8_HEIGHT][CHIP8_WIDTH];
+    private static final boolean[][] PIXELS = new boolean[CHIP8_HEIGHT][CHIP8_WIDTH];
     
     public Chip8Screen() {
         System.out.println("screen...................OK");
