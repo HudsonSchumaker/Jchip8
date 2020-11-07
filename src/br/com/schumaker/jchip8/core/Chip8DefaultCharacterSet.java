@@ -2,7 +2,7 @@ package br.com.schumaker.jchip8.core;
 
 /**
  *
- * @author hudson schumaker
+ * @author Hudson Schumaker
  */
 public class Chip8DefaultCharacterSet {
     
