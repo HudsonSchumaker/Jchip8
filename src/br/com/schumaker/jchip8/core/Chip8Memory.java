@@ -7,7 +7,7 @@ import br.com.schumaker.jchip8.exceptions.OutOfMemoryException;
 
 /**
  *
- * @author hudson schumaker
+ * @author Hudson schumaker
  */
 public class Chip8Memory {
 
