@@ -4,7 +4,7 @@ import br.com.schumaker.jchip8.config.Chip8Specs;
 
 /**
  *
- * @author Hudson schumaker
+ * @author Hudson Schumaker
  */
 public class Chip8Registers {
 
