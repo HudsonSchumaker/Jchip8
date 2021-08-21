@@ -6,7 +6,7 @@ package br.com.schumaker.jchip8.config;
  */
 public class Chip8Specs {
     public static final int CHIP8_MEMORY_SIZE = 4096;
-    public static final short CHIP8_PROGRAM_LOAD_ADDRESS = 0x200; //512
+    public static final short CHIP8_PROGRAM_LOAD_ADDRESS = 0x200; // 512
     public static final short LOAD_ADDR = CHIP8_PROGRAM_LOAD_ADDRESS;
     
     public static final int CHIP8_WIDTH = 64;
