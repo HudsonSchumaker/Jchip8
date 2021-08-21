@@ -6,7 +6,7 @@ import br.com.schumaker.jchip8.exceptions.PixelOutOfScreenExecption;
 
 /**
  *
- * @author hudson schumaker
+ * @author Hudson Schumaker
  */
 public class Chip8Screen {
 
