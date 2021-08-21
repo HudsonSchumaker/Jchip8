@@ -2,7 +2,7 @@ package br.com.schumaker.jchip8.config;
 
 /**
  *
- * @author hudson schumaker
+ * @author Hudson Schumaker
  */
 public class Chip8Specs {
     public static final int CHIP8_MEMORY_SIZE = 4096;
