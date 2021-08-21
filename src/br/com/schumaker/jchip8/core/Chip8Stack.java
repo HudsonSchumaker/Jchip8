@@ -5,7 +5,7 @@ import br.com.schumaker.jchip8.exceptions.StackPointerOutOfBoundsExecption;
 
 /**
  *
- * @author Hudson schumaker
+ * @author Hudson Schumaker
  */
 public class Chip8Stack {
     
